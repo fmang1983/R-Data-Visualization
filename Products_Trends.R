@@ -1,10 +1,10 @@
 
 #import dataset
-Scatter <- read.csv('C:/Users/fmang/Desktop/SampleTickets.txt',header =TRUE, sep ='\t')
+Scatter <- read.csv('SampleTickets.txt',header =TRUE, sep ='\t')
 
 #View (Scatter)
 
-Scatter$Month.Year..Ticket.Created.= factor(Scatter$Month.Year..Ticket.Created.,levels(Scatter$Month.Year..Ticket.Created.)[c(4,3,2,1,6,5)]) #Reset Levels Ordering
+Scatter$Month.Year..Ticket.Created.= factor(Scatter$Month.Year..Ticket.Created.,levels(as.factor(Scatter$Month.Year..Ticket.Created.))[c(4,3,2,1,6,5)]) #Reset Levels Ordering
 
 Scatter<-Scatter[is.na(Scatter$Month.Year..Ticket.Created.)==0,] #ensure there are no blanks for that column under Month.Year..Created.
 
@@ -32,11 +32,14 @@ names(s)[1]<-"Product"                              #Set names to columns
 names(s)[2]<-"Month"
 
 s$link<- paste(s$Product,s$Month)
-View(s)
+#View(s)
 
 Scatter$link<-paste(Scatter$Product.,as.character(Scatter$Month.Year..Ticket.Created.))
 unique(s$link)
 unique(Scatter$link)
+
+
+
 final<- merge(s,Scatter,by.x="link",by.y="link",all.x=TRUE)
 #View(final)
 final[1,]
@@ -67,6 +70,8 @@ for (i in 1:length(f$Total))
 }
 
 
+# add as.factor
+f$Month <- as.factor(f$Month)
 f$Month <- factor(f$Month,levels(f$Month)[c(4,3,2,1,6,5)])           #factoring of months
 
 
@@ -108,5 +113,7 @@ xyplot(f$"Total"~f$Month|f$Product, data = f,
        main="CIRT Distribution by Product and Month",
        ylab="CIRT Count", xlab="Month of Occurrence", scales=list(x = list(rel="free",rot = 45),y=list(at = seq (from =0, to =50,by= 5)))
 )
+
+
 
 
